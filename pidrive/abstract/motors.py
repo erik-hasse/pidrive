@@ -92,3 +92,73 @@ class DriveMotor(ABC):
     @abstractmethod
     def _set_direction(self, new):
         pass
+
+
+class Servo(ABC):
+    def __init__(
+            self, min_angle, max_angle,
+            angle=0, min_limit=None, max_limit=None
+    ):
+        if min_angle >= max_angle:
+            raise ValueError('min_angle must be less than max_angle!')
+        self._min_angle = min_angle
+        self._max_angle = max_angle
+        self.min_limit = min_limit
+        self.max_limit = max_limit
+        self.angle = angle
+
+    @property
+    def min_angle(self):
+        return self._min_angle
+
+    @property
+    def max_angle(self):
+        return self._max_angle
+
+    @property
+    def min_limit(self):
+        return self._min_limit
+
+    @min_limit.setter
+    def min_limit(self, new):
+        if new is None:
+            new = self._min_angle
+        if new < self._min_angle or self._max_angle < new:
+            raise ValueError(
+                f'min_limit mst be between {self._min_angle} and '
+                f'{self._max_angle}.'
+            )
+        self._min_limit = new
+
+    @property
+    def max_limit(self):
+        return self._max_limit
+
+    @max_limit.setter
+    def max_limit(self, new):
+        if new is None:
+            new = self._max_angle
+        if new < self._min_angle or self._max_angle < new:
+            raise ValueError(
+                f'max_limit mst be between {self._min_angle} and '
+                f'{self._max_angle}.'
+            )
+        self._max_limit = new
+
+    @property
+    def angle(self):
+        return self._angle
+
+    @angle.setter
+    def angle(self, new):
+        if new < self._min_limit or self._max_limit < new:
+            raise ValueError(
+                f'angle must be between {self._min_limit} and '
+                f'{self._max_limit}.'
+            )
+        self._set_angle(new)
+        self._angle = new
+
+    @abstractmethod
+    def _set_angle(self, new):
+        pass
