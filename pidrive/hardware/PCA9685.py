@@ -46,14 +46,15 @@ class PCA9685_Pin(Pin):
     PIN_RESOLUTION = 0x1000
 
     def __init__(self, board, pin_number, duty_cycle_res):
-        self._board = board
         self._start_delay = int(
             pin_number * self.PIN_RESOLUTION / board.N_PINS
         )
         self._on_register = self._FIRST_LED_CHANNEL + 4 * pin_number
         self._off_register = self._on_register + 2
+        super().__init__(
+            board, pin_number, self.PIN_RESOLUTION, duty_cycle_res
+        )
         self._set_register(self._on_register, self._start_delay)
-        super().__init__(pin_number, self.PIN_RESOLUTION, duty_cycle_res)
 
     def _set_duty_cycle(self, new):
         # Handle the all-on case separately
@@ -103,7 +104,6 @@ class PCA9685(PWMBoard):
     ):
         self._bus = bus
         self._address = self._BASE_ADDRESS + jumper_address
-        self.frequency = frequency
         self._bus.write_byte_data(
             self.address, _CHANNELS['mode1'], _MODE1_MASKS['allcall']
         )
@@ -111,6 +111,7 @@ class PCA9685(PWMBoard):
             self.address, _CHANNELS['mode2'], _MODE2_MASKS['outdrv']
         )
         super().__init__(
+            frequency,
             [PCA9685_Pin(self, i, duty_cycle_res) for i in range(self.N_PINS)]
         )
 
@@ -119,12 +120,7 @@ class PCA9685(PWMBoard):
         """The actual I2C address of the board (0x40 + jumper_address)."""
         return self._address
 
-    @property
-    def frequency(self):
-        """The frequency of the board in Hertz."""
-        return self._frequency
-
-    @frequency.setter
+    @PWMBoard.frequency.setter
     def frequency(self, new):
         # get the old mode, but don't write 1 to the restart bit
         mode = self._bus.read_byte_data(

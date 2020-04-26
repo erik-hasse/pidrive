@@ -16,11 +16,16 @@ class Pin(ABC):
         duty_cycle_res (int): The apparent resolution of the pin in software.
 
     """
-    def __init__(self, pin_number, pin_res, duty_cycle_res):
+    def __init__(self, board, pin_number, pin_res, duty_cycle_res):
+        self._board = board
         self._pin_number = pin_number
         self._pin_res = pin_res
         self.duty_cycle_res = duty_cycle_res
         self.duty_cycle = 0
+
+    @property
+    def board(self):
+        return self._board
 
     @property
     def duty_cycle_res(self):
@@ -65,12 +70,21 @@ class Pin(ABC):
 
 class PWMBoard(ABC):
     """A PWM board contains a list of instances of pins and a way to get each
-    pin."""
-    def __init__(self, pins):
+    pin. It also has a frequency that may be configureable."""
+    def __init__(self, frequency, pins):
         if not all(isinstance(x, Pin) for x in pins):
             raise ValueError('pins must be a list of Pin instances')
+        try:
+            self.frequency = frequency
+        except AttributeError:
+            self._frequency = frequency
         self._pins = pins
 
     def pin(self, i):
         """Get pin i from this board."""
         return self._pins[i]
+
+    @property
+    def frequency(self):
+        """The frequency of the board in Hertz."""
+        return self._frequency
