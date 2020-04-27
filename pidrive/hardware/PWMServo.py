@@ -1,5 +1,6 @@
 from pidrive.abstract import Servo
 
+
 class PWMServo(Servo):
     def __init__(
             self, pin, angle=0, min_angle=-90, max_angle=90,

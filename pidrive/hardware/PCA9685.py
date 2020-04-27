@@ -100,7 +100,7 @@ class PCA9685(PWMBoard):
     N_PINS = 16
 
     def __init__(
-            self, bus, duty_cycle_res=4, frequency=60, jumper_address=0
+            self, bus, duty_cycle_res=4096, frequency=50, jumper_address=0
     ):
         self._bus = bus
         self._address = self._BASE_ADDRESS + jumper_address
