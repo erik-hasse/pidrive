@@ -77,6 +77,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+*.ipynb
 
 # IPython
 profile_default/
@@ -136,3 +137,7 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# gRPC generated files
+*_pb2.py
+*_pb2_grpc.py

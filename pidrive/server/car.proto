@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package car;
+
+service Car {
+  rpc move (MoveRequest) returns (MoveReply) {}
+  rpc image (ImageRequest) returns (ImageReply) {}
+}
+
+message MoveRequest {
+  sint32 velocity = 1;
+  sint32 angle = 2;
+}
+
+message MoveReply {
+}
+
+message ImageRequest {
+}
+
+message ImageReply {
+  bytes image_array = 1;
+  repeated int32 shape = 2;
+  string dtype = 3;
+}
