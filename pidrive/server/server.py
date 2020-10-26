@@ -2,7 +2,7 @@ from concurrent import futures
 
 import grpc
 
-from pidrive.hardware import PiCarV
+from pidrive.vehicles import PiCarV
 
 import car_pb2
 import car_pb2_grpc
