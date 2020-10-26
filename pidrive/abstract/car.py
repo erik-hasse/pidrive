@@ -2,13 +2,16 @@ from abc import ABC
 
 
 class Car(ABC):
-    def __init__(self, drive_motors, turning_motors):
+    def __init__(self, drive_motors, turning_motors, **sensors):
         self._drive_motors = drive_motors
         self._turning_motors = turning_motors
+        for k, v in sensors.items():
+            setattr(self, k, v)
+
         self.velocity = 0
         self.angle = 0
 
-    def stop():
+    def stop(self):
         self.speed = 0
 
     @property

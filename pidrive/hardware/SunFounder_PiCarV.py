@@ -11,7 +11,7 @@ except ImportError:
         SMBus = None
 
 from pidrive.abstract import Car
-from pidrive.hardware import PCA9685, TB6612Motor, PWMServo
+from pidrive.hardware import PCA9685, TB6612Motor, PWMServo, USBWebcam
 
 
 class PiCarV(Car):
@@ -31,4 +31,8 @@ class PiCarV(Car):
         turning_motors = [
             PWMServo(pwm.pin(0), min_limit=-60, max_limit=60)
         ]
-        super().__init__(drive_motors, turning_motors)
+        camera = USBWebcam(
+            pan=PWMServo(pwm.pin(1), min_pulse=2.5, max_pulse=0.5),
+            tilt=PWMServo(pwm.pin(2), angle=-8, min_limit=-10)
+        )
+        super().__init__(drive_motors, turning_motors, camera=camera)
