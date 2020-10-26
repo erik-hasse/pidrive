@@ -1,6 +1,5 @@
 from concurrent import futures
 
-import cv2
 import grpc
 
 from pidrive.hardware import PiCarV
@@ -12,7 +11,6 @@ import car_pb2_grpc
 class CarService(car_pb2_grpc.CarServicer):
     def __init__(self, car):
         self.car = car
-        self.vid = cv2.VideoCapture(-1)
 
     def move(self, request, context):
         self.car.velocity = request.velocity
@@ -20,12 +18,16 @@ class CarService(car_pb2_grpc.CarServicer):
         return car_pb2.MoveReply()
 
     def image(self, request, context):
-        ret, frame = self.vid.read(-1)
+        frame = self.car.camera.read()
         return car_pb2.ImageReply(
             image_array=frame.tobytes(),
             shape=frame.shape,
             dtype=frame.dtype.str
         )
+
+    def move_camera(self, request, context):
+        getattr(self.car.camera, request.direction)(request.amount)
+        return car_pb2.MoveCameraReply()
 
 
 def serve():

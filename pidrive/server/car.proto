@@ -5,6 +5,7 @@ package car;
 service Car {
   rpc move (MoveRequest) returns (MoveReply) {}
   rpc image (ImageRequest) returns (ImageReply) {}
+  rpc move_camera (MoveCameraRequest) returns (MoveCameraReply) {}
 }
 
 message MoveRequest {
@@ -22,4 +23,12 @@ message ImageReply {
   bytes image_array = 1;
   repeated int32 shape = 2;
   string dtype = 3;
+}
+
+message MoveCameraRequest {
+  string direction = 1;
+  int32 amount = 2;
+}
+
+message MoveCameraReply {
 }
