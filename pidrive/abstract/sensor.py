@@ -12,6 +12,8 @@ class Sensor(ABC):
             raise AttributeError(
                 f'Tilt motor {self.tilt} does not support angle assignment'
             ) from e
+        except ValueError:
+            pass
 
     def down(self, amount=10):
         try:
@@ -20,6 +22,8 @@ class Sensor(ABC):
             raise AttributeError(
                 f'Tilt motor {self.tilt} does not support angle assignment'
             ) from e
+        except ValueError:
+            pass
 
     def left(self, amount=10):
         try:
@@ -28,6 +32,8 @@ class Sensor(ABC):
             raise AttributeError(
                 f'Pan motor {self.pan} does not support angle assignment'
             ) from e
+        except ValueError:
+            pass
 
     def right(self, amount=10):
         try:
@@ -36,3 +42,5 @@ class Sensor(ABC):
             raise AttributeError(
                 f'Pan motor {self.pan} does not support angle assignment'
             ) from e
+        except ValueError:
+            pass
