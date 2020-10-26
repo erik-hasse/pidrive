@@ -20,5 +20,4 @@ class PWMServo(Servo):
             * self._angle_to_pulse(new)
             / 1000
         )
-        print(cycle)
         self._pin.duty_cycle = cycle
